@@ -1,70 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <title>Convite</title>
 </head>
 
-<body class="corpo">
-  <h1>Convite do Zoom</h1>
-  <form method="post" action="./index.php">
-    <label for="story">Insira o Convite</label>
+<body>
+  <div class="card text-center">
+    <div class="card-header">
+      Congregação Pitangueiras
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Convite do Zoom</h5>
+      <p class="card-text">Insira o convite do Zoom abaixo</p>
+    </div>
+    <?php
+    if (!empty($_POST)) {
 
-    <textarea name="conviteZoom" id="conviteZoom" cols="110" rows="20" autofocus required></textarea>
-    <br>
-    <button class='btn' type="submit">Gerar Convite</button>
-  </form>
-  <hr>
-  <?php
-  if (!empty($_POST)) {
+      $conviteZoom = $_POST['conviteZoom'];
 
-    $conviteZoom = $_POST['conviteZoom'];
+      $posEntrar = strpos($conviteZoom, "Entrar");
+      $posDispositivo = strpos($conviteZoom, "Dispositivo");
+      $tamanho1 = $posDispositivo - $posEntrar;
+      $parteConvite = substr($conviteZoom, $posEntrar, $tamanho1);
 
-    $posEntrar = strpos($conviteZoom, "Entrar");
-    $posDispositivo = strpos($conviteZoom, "Dispositivo");
-    $tamanho1 = $posDispositivo - $posEntrar;
-    $parteConvite = substr($conviteZoom, $posEntrar, $tamanho1);
+      $entrar = explode("ID", $parteConvite);
+      $entrar = $entrar[0];
 
-    $entrar = explode("ID", $parteConvite);
-    $entrar = $entrar[0];
+      $posId = strpos($conviteZoom, "ID");
+      $posSenha = strpos($conviteZoom, "Senha");
+      $tamanho2 = $posSenha - $posId;
+      $idAcesso =  substr($conviteZoom, $posId, $tamanho2);
 
-    $posId = strpos($conviteZoom, "ID");
-    $posSenha = strpos($conviteZoom, "Senha");
-    $tamanho2 = $posSenha - $posId;
-    $idAcesso =  substr($conviteZoom, $posId, $tamanho2);
+      $senha = explode(" ", $parteConvite);
+      $senha = $senha[11];
 
-    $senha = explode(" ", $parteConvite);
-    $senha = $senha[11];
+      echo "<div id='convite' class='containerTextarea'>";
+      echo "*Reunião da Congregação Pitangueiras " . date('d/m/y') . "*";
+      echo "<br>";
+      echo "<br>";
+      echo "Abertura da Sala: *18h30min*";
+      echo "<br>";
+      echo "Início da Reunião: *19h*";
+      echo "<br>";
+      echo "<br>";
+      echo $entrar;
+      echo "<br>" . $idAcesso;
+      echo "<br> Senha de Acesso: " . $senha;
+      echo "<br>";
+      echo "<br>";
+      echo "*ACESSO APENAS A PESSOAS AUTORIZADAS*";
+      echo "<br>";
+      echo "</div>";
+      echo "<br>";
+      echo "<button class='bt btn btn-primary btn-lg' type='submit' onclick='window.history.back();'>Fazer novo convite</button>";
+      echo "<br>";
+    } else {
+    ?>
+      <form method="post" action="./index.php">
+        <textarea name="conviteZoom" id="conviteZoom" rows="22" autofocus required></textarea>
+        <br>
+        <br>
+        <button class='bt btn btn-primary btn-lg' type="submit">Gerar Convite</button>
+      </form>
+      <br>
+    <?php }
+    ?>
+    <div class="card-footer text-muted">
+      Convite configurado para envio pelo Whatsapp
+    </div>
+  </div>
 
-    echo "<div id='convite' class='container'>";
-    echo "*Reunião da Congregação Pitangueiras*";
-    echo "<br>";
-    echo "<br>";
-    echo "Abertura da Sala: *18h30min*";
-    echo "<br>";
-    echo "Início da Reunião: *19h*";
-    echo "<br>";
-    echo "<br>";
-    echo $entrar;
-    echo "<br>" . $idAcesso;
-    echo "<br> Senha de Acesso: " . $senha;
-    echo "<br>";
-    echo "</div>";
-  }
-  ?>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
-
-<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous">
-
-  document.getElementById('botaoCopia').addEventListener('click', function() {
-
-    document.getElementById('convite').select();
-    document.execCommand('copy');
-  });
-</script>
 
 </html>
 
@@ -73,15 +90,22 @@
     text-align: -webkit-center;
   }
 
-  .btn {
-    margin-top: 10px;
+  .bt {
+    width: fit-content;
+    align-self: center;
   }
 
-  .container {
+  .containerTextarea {
     margin-top: 10px;
+    margin-bottom: 10px;
     width: fit-content;
-    border: 0.5px solid;
+    border: 1px solid #ccc;
     padding: 10px 10px 10px 10px;
+    max-width: fit-content;
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px #999;
+    font-family: -webkit-pictograph;
+    align-self: center;
   }
 
   label,
@@ -97,6 +121,7 @@
     border: 1px solid #ccc;
     box-shadow: 1px 1px 1px #999;
     font-family: -webkit-pictograph;
+    min-width: 50%;
   }
 
   label {
