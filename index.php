@@ -13,6 +13,23 @@
 </head>
 
 <body>
+  <?php
+
+  require_once('./apiCurl.class.php');
+  $ch = curl_init();
+
+  $ac = new PluginAcessokanCurl($ch);
+
+  $result1 = $ac->getLink($ch);
+  $result2 = $ac->execResult($ch);
+  $result3 = $ac->closeConn($ch);
+
+  var_dump($ch, $ac, $result1, $result2, $result3);
+
+  ?>
+  <pre>
+
+</pre>
   <div class="card text-center">
     <div class="card-header">
       Congregação Pitangueiras
@@ -23,6 +40,30 @@
     </div>
     <?php
     if (!empty($_POST)) {
+
+
+      $curl = curl_init();
+
+      curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://api.zoom.us/v2/meetings/73908116163',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'GET',
+        CURLOPT_HTTPHEADER => array(
+          'authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOm51bGwsImlzcyI6IkpNSnRyTzVWU0txMEZ2UGZSRVlWSkEiLCJleHAiOjE2MzI5NjAwMjAsImlhdCI6MTYzMjg3MzYyMX0.4gAZtdRNWZAy0D9xfelWPAAdV9Cv0CPF8ugfKMlnUlg',
+          'Cookie: TS01aed67e=0114113361b593464cb8472c0727e9723dcc89347f52a9c0dd1cb78cbe3aa1e4cf585ce599bc28ae5deb579670be082861749ce365; TS01da2a01=0114113361b593464cb8472c0727e9723dcc89347f52a9c0dd1cb78cbe3aa1e4cf585ce599bc28ae5deb579670be082861749ce365; cred=A88E94BA82BB65B50817CFCBC1D73310'
+        ),
+      ));
+
+      $response = curl_exec($curl);
+
+      curl_close($curl);
+      echo $response;
+
 
       $conviteZoom = $_POST['conviteZoom'];
 

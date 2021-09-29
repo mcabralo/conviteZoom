@@ -1,0 +1,200 @@
+  //!FIM DAS FUNÇÕES DO CURL
+/*
+  //!INÍCIO DAS FUNÇÕES DO PROJETO
+  //Método para criação do Projeto
+  function createProject($ch, $nomeContrato)
+  {
+    $body = json_encode(
+      array(
+        "jsonrpc" => "2.0",
+        "method" => "createProject",
+        "id" => "1",
+        "params" => array(
+          "name" => "[" . $nomeContrato . "] Sustain",
+          "owner_id" => "1",
+          "contract_id" => "2"
+        )
+      )
+    );
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+  }
+
+  // Adicionar o usuário padrão no projeto (Precisa-se para gerar a visualização da Task)
+  function addProjectUser($ch, $idProjeto)
+  {
+    $body = json_encode(
+      array(
+        "jsonrpc" => "2.0",
+        "method" => "addProjectUser",
+        "id" => "1",
+        "params" => [
+          $idProjeto,
+          "1",
+          "project-manager"
+        ]
+      )
+    );
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+  }
+
+  //Busca nome do projeto
+  function getNameProject($nomeContrato, $ch)
+  {
+    $body = json_encode(
+      array(
+        "jsonrpc" => "2.0",
+        "method" => "getProjectByName",
+        "id" => "1",
+        "params" => array(
+          "name" => "[" . $nomeContrato . "] Sustain"
+        )
+      )
+    );
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+  }
+  //!FIM DAS FUNÇÕES DO PROJETO
+
+  //Métodos para limpeza da descrição
+  function myUrlEncode($string)
+  {
+    $entities = array(
+      '&lt;strong&gt;',
+      '&lt;/strong&gt;',
+      '&lt;br/&gt;',
+      '&lt;table',
+      'style="width: 100%;"',
+      '&lt;p&gt;',
+      '&lt;br /&gt;',
+      '&lt;/p&gt;',
+      '&lt;tbody&gt;',
+      '&lt;tr&gt;',
+      '&gt;',
+      '&lt;th',
+      '&lt;/th',
+      '&lt;/tr',
+      '&lt;p&gt;',
+      '&lt;/p&gt;',
+      '&lt;td',
+      'style="text-align: center;" 1.0.0',
+      '&lt;/td',
+      'style="text-align: center;"',
+      '&lt;/tbody',
+      '&lt;/table'
+    );
+    $replacements = array('');
+    return str_replace($entities, $replacements, $string);
+  }
+
+  //Métodos para recuperar a URL do chamado
+  public function urlAtual()
+  {
+    global $CFG_GLPI;
+
+    $protocolo    = (strpos(strtolower($_SERVER['SERVER_PROTOCOL']), 'https') === false) ? 'http' : 'https';
+    $host         = $_SERVER['HTTP_HOST'];
+    $pasta = $CFG_GLPI['root_doc'];
+    $UrlAtual = $protocolo . '://' . $host . $pasta;
+
+    return $UrlAtual;
+  }
+
+  //Métodos para limpeza da data
+  function data($data)
+  {
+    return date("d/m/Y", strtotime($data));
+  }
+
+  //Fecha o ticket do usuário caso seja setado na configuração
+  public function closeTicket($dataCriacao, $idTicket)
+  {
+    global $DB;
+
+    $query = "UPDATE
+                `glpi_tickets`
+              SET
+                `closedate` = '$dataCriacao', 
+                `solvedate` = '$dataCriacao',
+                `status` = '6'
+              WHERE
+                `id` = '$idTicket'";
+    $DB->queryOrDie($query, $DB->error());
+  }
+}
+
+
+  //!INÍCIO DAS FUNÇÕES DA TAREFAS
+  //Método para criação da Task
+  public function createTask($ch, $titulo, $descricao, $idTicket, $dataCriacao, $nomeCompleto, $idContrato)
+  {
+    global $DB;
+
+    $descricaoEnvio = $this->myUrlEncode($descricao);
+
+    $UrlAtual = $this->urlAtual();
+
+    $body = json_encode(
+      array(
+        "jsonrpc" => "2.0",
+        "method" => "createTask",
+        "id" => "1",
+        "params" => array(
+          "title" => "[GLPI] " . $titulo,
+          "project_id" => $idContrato,
+          "description" =>
+          "**Solicitação**: 
+" . $descricaoEnvio . "
+
+Chamado Aberto por: **" . $nomeCompleto . "**
+URL: [Ir para o Chamado](" . $UrlAtual  . "/front/ticket.form.php?id=" . $idTicket . ")
+Data: " . $this->data($dataCriacao)
+        )
+      )
+    );
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+
+    $query = "INSERT INTO `glpi_plugin_acessokan_createTask` 
+                (`title`, `project_id`, `description`, `date_started`, `criador`, `idTicket`)
+              VALUES 
+                ('$titulo', '$idContrato', '$descricaoEnvio', '$dataCriacao', '$nomeCompleto', '$idTicket')";
+    $DB->queryOrDie($query, $DB->error());
+  }
+  //!FIM DAS FUNÇÕES DA TAREFA
+
+  //!INÍCIO DAS FUNÇÕES DO CURL
+  //Método para executar o cURL
+  public function execResult($ch)
+  {
+    $result = curl_exec($ch);
+
+    // if (curl_errno($ch)) {
+    //   $fp = fopen("log.txt", "w");
+
+    //   fwrite($fp, curl_error($ch));
+
+    //   // Fecha o arquivo
+    //   fclose($fp);
+    //   // echo 'Error:' . curl_error($ch);
+    // }
+
+    //Decodifica para JSON
+    return json_decode($result);
+  }
+*/
+
+    //Método para executar o cURL
+  public function execResult($ch) {
+    $result = curl_exec($ch);
+
+    // if (curl_errno($ch)) {
+    //   $fp = fopen("log.txt", "w");
+
+    //   fwrite($fp, curl_error($ch));
+
+    //   // Fecha o arquivo
+    //   fclose($fp);
+    //   // echo 'Error:' . curl_error($ch);
+    // }
+
+    //Decodifica para JSON
+    return json_decode($result);
+  }
